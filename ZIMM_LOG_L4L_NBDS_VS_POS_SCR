@@ -1,0 +1,13 @@
+*&---------------------------------------------------------------------*
+*& Include          ZIMM_LOG_L4L_NBDS_VS_POS_SCR
+*&---------------------------------------------------------------------*
+TABLES: zmmt_po_header, zmmt_po_item, mara.
+
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.
+  SELECT-OPTIONS: s_ebeln     FOR zmmt_po_header-ebeln,
+                  s_dtfile    FOR zmmt_po_header-datefile,
+                  s_lifnr     FOR zmmt_po_header-lifnr NO INTERVALS,
+                  s_doc_pr    FOR zmmt_po_item-ebeln_pr,
+                  s_criado    FOR zmmt_po_item-criado,
+                  s_matnr     FOR mara-matnr.
+SELECTION-SCREEN END OF BLOCK b1.

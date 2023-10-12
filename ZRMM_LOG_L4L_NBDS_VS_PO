@@ -1,0 +1,20 @@
+*&---------------------------------------------------------------------*
+*& Report ZRMM_LOG_L4L_NBDS_VS_PO
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zrmm_log_l4l_nbds_vs_po.
+
+INCLUDE zimm_log_l4l_nbds_vs_pos_scr.
+INCLUDE zimm_log_l4l_nbds_vs_pos_top.
+INCLUDE zimm_log_l4l_nbds_vs_pos_cls.
+INCLUDE zimm_log_l4l_nbds_vs_pos_f01.
+
+START-OF-SELECTION.
+
+  DATA(lv_is_text_search_supported) =
+      cl_salv_gui_table_ida=>db_capabilities( )->is_text_search_supported( ).
+
+  PERFORM f_check_parametros.
+  PERFORM f_busca_dados.
+  PERFORM f_exibe_alv.
