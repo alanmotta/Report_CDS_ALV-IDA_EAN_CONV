@@ -1,0 +1,26 @@
+@AbapCatalog.sqlViewName: 'ZCDS_LOG_L4L'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'L4L Log NBDS x PO'
+define view ZCDS_LOG_L4L_NBDS_VS_PO
+  as select from zmmt_po_header as header
+    inner join   zmmt_po_item   as item on item.ebeln = header.ebeln
+    inner join   mara           as mara on mara.ean11 = item.ean11
+{
+      @EndUserText: { label: 'NBDS Nike' }
+  key header.ebeln    as ebeln,
+      @EndUserText: { label: 'Data de Integração' }
+      header.datefile as datefile,
+      @EndUserText: { label: 'Fábrica' }
+      header.lifnr    as lifnr,
+      @EndUserText: { label: 'Requisição de Compra' }
+      item.ebeln_pr   as ebeln_pr,
+      @EndUserText: { label: 'Pedido de Compra' }
+      item.criado     as criado,
+      mara.matnr      as matnr,
+      @EndUserText: { label: 'EAN' }
+      item.ean11      as ean11,
+      @EndUserText: { label: 'Log' }
+      header.log      as log
+}
