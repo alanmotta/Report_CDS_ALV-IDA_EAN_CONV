@@ -1,0 +1,35 @@
+@AbapCatalog.sqlViewName: 'ZCDS_L4L_EAN'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS para conversão de EAN'
+define view ZCDS_LOG_L4L_NBDS_VS_PO_2
+  as select from zmmt_po_item as i
+{
+  key i.ebeln,
+  key i.item,
+  key replace(
+      ltrim(
+        replace(
+          i.ean11, '0', 'X'
+        ), 'X'
+      ), 'X', '0'
+    ) as ean11,
+      i.ebeln_pr,
+      i.ihrez,
+      i.menge,
+      i.meins,
+      i.netpr,
+      i.werks,
+      i.lgort,
+      i.eindt,
+      i.waers,
+      i.mwskz,
+      i.colordescr,
+      i.ogacdate,
+      i.criado,
+      i.ebelp,
+      i.log
+}
+where
+  i.log <> ' '
