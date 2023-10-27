@@ -4,23 +4,50 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'L4L Log NBDS x PO'
 define view ZCDS_LOG_L4L_NBDS_VS_PO
-  as select from zmmt_po_header as header
-    inner join   zmmt_po_item   as item on item.ebeln = header.ebeln
-    inner join   mara           as mara on mara.ean11 = item.ean11
+  as select from     zmmt_po_header            as header
+    right outer join ZCDS_LOG_L4L_NBDS_VS_PO_2 as item on item.ebeln = header.ebeln
+    inner join       mara                      as mara on item.ean11 = mara.ean11
 {
       @EndUserText: { label: 'NBDS Nike' }
-  key header.ebeln    as ebeln,
+  key header.ebeln                as ebeln,
       @EndUserText: { label: 'Data de Integração' }
-      header.datefile as datefile,
+      max( header.datefile )      as datefile,
       @EndUserText: { label: 'Fábrica' }
-      header.lifnr    as lifnr,
+      header.lifnr                as lifnr,
       @EndUserText: { label: 'Requisição de Compra' }
-      item.ebeln_pr   as ebeln_pr,
+      item.ebeln_pr               as ebeln_pr,
       @EndUserText: { label: 'Pedido de Compra' }
-      item.criado     as criado,
-      mara.matnr      as matnr,
+      item.criado                 as criado,
+      mara.matnr                  as matnr,
       @EndUserText: { label: 'EAN' }
-      item.ean11      as ean11,
+      lpad( item.ean11, 14, '0' ) as ean11,
+      @EndUserText: { label: 'Quantida' }
+      item.menge                  as menge,
+      @EndUserText: { label: 'Unidade de medida' }
+      item.meins                  as meins,
+      @EndUserText: { label: 'Centro' }  
+      item.werks                  as werks,
+      @EndUserText: { label: 'Depósito' }      
+      item.lgort                  as lgort,
+      @EndUserText: { label: 'Data Remessa' }
+      item.eindt                  as eindt,
       @EndUserText: { label: 'Log' }
-      header.log      as log
+      item.log                    as log
+
 }
+where
+      header.gsid <> 0
+  and mara.mtart  =  'ZHAW'
+group by
+  header.ebeln,
+  header.lifnr,
+  item.ebeln_pr,
+  item.criado,
+  mara.matnr,
+  item.ean11,
+  item.menge,
+  item.meins,
+  item.werks,
+  item.lgort,
+  item.eindt,
+  item.log
